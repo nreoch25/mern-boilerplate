@@ -98,57 +98,34 @@ const renderFullPage = (html, initialState) => {
 app.use((req, res, next) => {
   const store = configureStore();
   const context = {};
+  let initialView;
   let status = 200;
   const setStatus = newStatus => {
     status = newStatus;
   };
-  const initialView = renderToString(
-    <Provider store={store}>
-      <Context setStatus={setStatus}>
-        <StaticRouter context={{}} location={req.url}>
-          <AppContainer />
-        </StaticRouter>
-      </Context>
-    </Provider>
-  );
-  const finalState = store.getState();
-  res
-    .set("Content-Type", "text/html")
-    .status(200)
-    .end(renderFullPage(initialView, finalState));
-  // match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
-  //   if (err) {
-  //     return res.status(500);
-  //   }
-  //   if (redirectLocation) {
-  //     return res.redirect(
-  //       302,
-  //       redirectLocation.pathname + redirectLocation.search
-  //     );
-  //   }
-  //   if (!renderProps) {
-  //     return next();
-  //   }
-  //   const store = configureStore();
-  //
-  //   //TODO implement fetchComponentData for Server side rendering
-  //   return fetchComponentData(store, renderProps.components, renderProps.params)
-  //     .then(() => {
-  //       const initialView = renderToString(
-  //         <Provider store={store}>
-  //           <RouterContext {...renderProps} />
-  //         </Provider>
-  //       );
-  //       const finalState = store.getState();
-  //       res
-  //         .set("Content-Type", "text/html")
-  //         .status(200)
-  //         .end(renderFullPage(initialView, finalState));
-  //     })
-  //     .catch(error => {
-  //       next(error);
-  //     });
-  // });
+  try {
+    initialView = renderToString(
+      <Provider store={store}>
+        <Context setStatus={setStatus}>
+          <StaticRouter context={{}} location={req.url}>
+            <AppContainer />
+          </StaticRouter>
+        </Context>
+      </Provider>
+    );
+  } catch (error) {
+    return res.status(500);
+  }
+
+  if (context.url) {
+    res.redirect(301, context.url);
+  } else {
+    const finalState = store.getState();
+    res
+      .set("Content-Type", "text/html")
+      .status(200)
+      .end(renderFullPage(initialView, finalState));
+  }
 });
 
 app.listen(serverConfig.port, error => {
