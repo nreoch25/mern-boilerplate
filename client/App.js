@@ -1,5 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
+import propTypes from "prop-types";
 import { Router, browserHistory } from "react-router";
 
 // Import routes
@@ -11,13 +12,11 @@ require("./styles/main.css");
 export default function App(props) {
   return (
     <Provider store={props.store}>
-      <Router history={browserHistory}>
-        {routes}
-      </Router>
+      <Router history={browserHistory}>{routes}</Router>
     </Provider>
   );
 }
 
 App.propTypes = {
-  store: React.PropTypes.object.isRequired
-}
+  store: propTypes.object.isRequired
+};
