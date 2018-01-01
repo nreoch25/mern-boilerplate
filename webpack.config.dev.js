@@ -24,18 +24,15 @@ module.exports = {
     publicPath: "http://0.0.0.0:8000/"
   },
   resolve: {
-    extensions: ["", ".js", ".jsx", ".css"],
-    modules: [
-      "client",
-      "node_modules"
-    ]
+    extensions: [".js", ".jsx", ".css"],
+    modules: ["client", "node_modules"]
   },
   module: {
     loaders: [
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: "style-loader!css-loader!postcss-loader",
+        loader: "style-loader!css-loader!postcss-loader"
       },
       {
         test: /\.jsx*$/,
@@ -58,15 +55,18 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env": {
         CLIENT: JSON.stringify(true),
-        "NODE_ENV": JSON.stringify("development")
+        NODE_ENV: JSON.stringify("development")
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: __dirname,
+        postcss: [
+          cssnext({
+            browsers: ["last 2 versions", "IE > 10"]
+          })
+        ]
       }
     })
-  ],
-
-  postcss: () => [
-    cssnext({
-      browsers: [ "last 2 versions", "IE > 10" ]
-    })
   ]
-
 };

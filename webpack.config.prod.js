@@ -6,10 +6,8 @@ var cssnext = require("postcss-cssnext");
 
 module.exports = {
   devtool: "hidden-source-map",
-  entry : {
-    app: [
-      "./client/index.js"
-    ],
+  entry: {
+    app: ["./client/index.js"],
     vendor: [
       "react",
       "react-dom",
@@ -26,18 +24,18 @@ module.exports = {
     publicPath: "/"
   },
   resolve: {
-    extensions: [ "", ".js", ".jsx", ".css" ],
-    modules: [
-      "client",
-      "node_modules"
-    ]
+    extensions: [".js", ".jsx", ".css"],
+    modules: ["client", "node_modules"]
   },
   module: {
     loaders: [
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader", "postcss-loader")
+        loader: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader", "postcss-loader"]
+        })
       },
       {
         test: /\.jsx*$/,
@@ -53,7 +51,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       "process.env": {
-        "NODE_ENV": JSON.stringify("production")
+        NODE_ENV: JSON.stringify("production")
       }
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -67,17 +65,22 @@ module.exports = {
     }),
     new ChunkManifestPlugin({
       filename: "chunk-manifest.json",
-      manifestVariable: "webpackManifest",
+      manifestVariable: "webpackManifest"
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false,
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: __dirname,
+        postcss: [
+          cssnext({
+            browsers: ["last 2 versions", "IE > 10"]
+          })
+        ]
       }
     })
-  ],
-  postcss: () => [
-    cssnext({
-      browsers: [ "last 2 versions", "IE > 10" ]
-    })
   ]
-}
+};
