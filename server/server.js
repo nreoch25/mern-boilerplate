@@ -20,7 +20,8 @@ if (process.env.NODE_ENV === "development") {
     webpackDevMiddleware(compiler, {
       noInfo: false,
       colors: true,
-      publicPath: config.output.publicPath
+      publicPath: config.output.publicPath,
+      headers: { "Access-Control-Allow-Origin": "*" }
     })
   );
   app.use(webpackHotMiddleware(compiler));
@@ -73,7 +74,7 @@ const renderFullPage = (html, initialState) => {
         <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css" />
       </head>
       <body>
-        <div id="root"><div>${html}</div></div>
+        <div id="root">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           ${process.env.NODE_ENV === "production"
