@@ -31,10 +31,11 @@ import { configureStore } from "../client/store";
 import { Provider } from "react-redux";
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { match, RouterContext } from "react-router";
+import { StaticRouter } from "react-router";
+import Context from "react-context-component";
+import AppContainer from "../client/AppContainer";
 
 // Import required modules
-import routes from "../client/routes";
 import { fetchComponentData } from "./utils/fetchData";
 import serverConfig from "./config";
 
@@ -94,39 +95,59 @@ const renderFullPage = (html, initialState) => {
 
 // Server side Rendering based on routes matched by react-router
 app.use((req, res, next) => {
-  match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
-    if (err) {
-      return res.status(500);
-    }
-    if (redirectLocation) {
-      return res.redirect(
-        302,
-        redirectLocation.pathname + redirectLocation.search
-      );
-    }
-    if (!renderProps) {
-      return next();
-    }
-    const store = configureStore();
-
-    //TODO implement fetchComponentData for Server side rendering
-    return fetchComponentData(store, renderProps.components, renderProps.params)
-      .then(() => {
-        const initialView = renderToString(
-          <Provider store={store}>
-            <RouterContext {...renderProps} />
-          </Provider>
-        );
-        const finalState = store.getState();
-        res
-          .set("Content-Type", "text/html")
-          .status(200)
-          .end(renderFullPage(initialView, finalState));
-      })
-      .catch(error => {
-        next(error);
-      });
-  });
+  const store = configureStore();
+  const context = {};
+  let status = 200;
+  const setStatus = newStatus => {
+    status = newStatus;
+  };
+  const initialView = renderToString(
+    <Provider store={store}>
+      <Context setStatus={setStatus}>
+        <StaticRouter context={{}} location={req.url}>
+          <AppContainer />
+        </StaticRouter>
+      </Context>
+    </Provider>
+  );
+  const finalState = store.getState();
+  res
+    .set("Content-Type", "text/html")
+    .status(200)
+    .end(renderFullPage(initialView, finalState));
+  // match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
+  //   if (err) {
+  //     return res.status(500);
+  //   }
+  //   if (redirectLocation) {
+  //     return res.redirect(
+  //       302,
+  //       redirectLocation.pathname + redirectLocation.search
+  //     );
+  //   }
+  //   if (!renderProps) {
+  //     return next();
+  //   }
+  //   const store = configureStore();
+  //
+  //   //TODO implement fetchComponentData for Server side rendering
+  //   return fetchComponentData(store, renderProps.components, renderProps.params)
+  //     .then(() => {
+  //       const initialView = renderToString(
+  //         <Provider store={store}>
+  //           <RouterContext {...renderProps} />
+  //         </Provider>
+  //       );
+  //       const finalState = store.getState();
+  //       res
+  //         .set("Content-Type", "text/html")
+  //         .status(200)
+  //         .end(renderFullPage(initialView, finalState));
+  //     })
+  //     .catch(error => {
+  //       next(error);
+  //     });
+  // });
 });
 
 app.listen(serverConfig.port, error => {

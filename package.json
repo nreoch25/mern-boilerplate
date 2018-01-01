@@ -26,6 +26,7 @@
     "express": "4.14.0",
     "mongoose": "4.11.11",
     "react": "16.2.0",
+    "react-context-component": "0.0.6",
     "react-dom": "16.2.0",
     "react-redux": "5.0.6",
     "react-router-dom": "4.2.2",
