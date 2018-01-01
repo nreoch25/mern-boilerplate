@@ -4,11 +4,15 @@
   "description": "Boilerplate for mern stack",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development nodemon index.js",
+    "start":
+      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development nodemon index.js",
     "start:prod": "cross-env NODE_ENV=production node index.js",
-    "bs": "npm run clean && npm run build && npm run build:server && npm run start:prod",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
-    "build:server": "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
+    "bs":
+      "npm run clean && npm run build && npm run build:server && npm run start:prod",
+    "build":
+      "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build:server":
+      "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
     "clean": "rimraf dist",
     "lint": "eslint client server || true",
     "test": "mocha client/utils/testSetup.js \"client/**/*.test.js\" || true"
@@ -24,7 +28,7 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-redux": "5.0.6",
-    "react-router": "3.0.5",
+    "react-router-dom": "4.2.2",
     "redux": "3.6.0",
     "redux-thunk": "2.1.0"
   },
