@@ -33,6 +33,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
+import { getLoadableState } from "loadable-components/server";
 import Context from "react-context-component";
 import AppContainer from "../client/AppContainer";
 
@@ -56,7 +57,7 @@ app.use(bodyParser.urlencoded({ limit: "20mb", extended: false }));
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
 // Render Initial HTML
-const renderFullPage = (html, initialState) => {
+const renderFullPage = (html, initialState, loadableState) => {
   // Import Manifests
   const assetsManifest =
     process.env.webpackAssets && JSON.parse(process.env.webpackAssets);
@@ -89,43 +90,33 @@ const renderFullPage = (html, initialState) => {
         <script src='${process.env.NODE_ENV === "production"
           ? assetsManifest["/app.js"]
           : "/app.js"}'></script>
+        ${loadableState.getScriptTag()}
       </body>
     </html>
   `;
 };
 
 // Server side Rendering based on routes matched by react-router
-app.use((req, res, next) => {
+app.get("*", async (req, res, next) => {
   const store = configureStore();
   const context = {};
-  let initialView;
-  let status = 200;
-  const setStatus = newStatus => {
-    status = newStatus;
-  };
-  try {
-    initialView = renderToString(
-      <Provider store={store}>
-        <Context setStatus={setStatus}>
-          <StaticRouter context={{}} location={req.url}>
-            <AppContainer />
-          </StaticRouter>
-        </Context>
-      </Provider>
-    );
-  } catch (error) {
-    return res.status(500);
-  }
-
+  const appWithRouter = (
+    <Provider store={store}>
+      <StaticRouter context={{}} location={req.url}>
+        <AppContainer />
+      </StaticRouter>
+    </Provider>
+  );
   if (context.url) {
-    res.redirect(301, context.url);
-  } else {
-    const finalState = store.getState();
-    res
-      .set("Content-Type", "text/html")
-      .status(200)
-      .end(renderFullPage(initialView, finalState));
+    return res.redirect(context.url);
   }
+  const finalState = store.getState();
+  const loadableState = await getLoadableState(appWithRouter);
+  const initialView = renderToString(appWithRouter)
+  res
+    .set("Content-Type", "text/html")
+    .status(200)
+    .end(renderFullPage(initialView, finalState, loadableState));
 });
 
 app.listen(serverConfig.port, error => {

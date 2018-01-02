@@ -1,5 +1,6 @@
 var fs = require("fs");
 var path = require("path");
+var webpack = require("webpack");
 var ExternalsPlugin = require("webpack2-externals-plugin");
 
 module.exports = {
@@ -20,7 +21,8 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
         query: {
-          presets: ["react", "env", "stage-0"]
+          presets: ["react", "env", "stage-0"],
+          plugins: ["transform-runtime"]
         }
       },
       {
@@ -33,6 +35,9 @@ module.exports = {
     new ExternalsPlugin({
       type: "commonjs",
       include: path.join(__dirname, "./node_modules/")
+    }),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
     })
   ]
 };

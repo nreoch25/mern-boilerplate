@@ -7,7 +7,7 @@ var cssnext = require("postcss-cssnext");
 module.exports = {
   devtool: "hidden-source-map",
   entry: {
-    app: ["./client/index.js"],
+    app: ["babel-polyfill", "./client/index.js"],
     vendor: [
       "react",
       "react-dom",

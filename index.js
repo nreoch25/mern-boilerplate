@@ -6,7 +6,8 @@ if(process.env.NODE_ENV === "production") {
   // In production serve the webpack server file
   require("./dist/server.bundle.js");
 } else {
-
+  require("babel-register");
+  require("babel-polyfill");
   require("./server/server");
 
 }
