@@ -1,11 +1,14 @@
 import { createStore, applyMiddleware, compose } from "redux";
+import createSagaMiddleware from "redux-saga";
 import thunk from "redux-thunk";
 import DevTools from "./utils/DevTools";
 import rootReducer from "./reducers";
+import sagas from "./sagas";
 
 export function configureStore(initialState = {}) {
+  const sagaMiddleware = createSagaMiddleware();
   const enhancers = [
-    applyMiddleware(thunk),
+    applyMiddleware(thunk, sagaMiddleware),
   ];
 
   if(process.env.CLIENT && process.env.NODE_ENV === "development") {
@@ -14,6 +17,9 @@ export function configureStore(initialState = {}) {
   }
 
   const store = createStore(rootReducer, initialState, compose(...enhancers));
+
+  // run the saga
+  sagaMiddleware.run(sagas);
 
   // For hot reloading reducers
   if(module.hot) {
