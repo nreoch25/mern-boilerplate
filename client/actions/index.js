@@ -4,13 +4,13 @@ export const FETCH_GISTS_SUCCEEDED = "FETCH_GISTS_SUCCEEDED";
 export const fetchGists = () => {
   return {
     type: FETCH_GISTS_REQUESTED,
-    payload: {},
+    payload: {}
   };
-}
+};
 
-export const receiveGists = (payload) => {
+export const receiveGists = payload => {
   return {
     type: FETCH_GISTS_SUCCEEDED,
     payload
   };
-}
+};

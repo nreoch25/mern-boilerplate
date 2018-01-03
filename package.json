@@ -4,11 +4,15 @@
   "description": "Boilerplate for mern stack",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development nodemon index.js --exec babel-node --plugins dynamic-import-node",
+    "start":
+      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development nodemon index.js --exec babel-node --plugins dynamic-import-node",
     "start:prod": "cross-env NODE_ENV=production node index.js",
-    "bs": "npm run clean && npm run build && npm run build:server && npm run start:prod",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
-    "build:server": "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
+    "bs":
+      "npm run clean && npm run build && npm run build:server && npm run start:prod",
+    "build":
+      "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build:server":
+      "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
     "clean": "rimraf dist",
     "lint": "eslint client server || true",
     "test": "mocha client/utils/testSetup.js \"client/**/*.test.js\" || true"
@@ -38,7 +42,6 @@
     "babel-loader": "7.1.2",
     "babel-plugin-dynamic-import-node": "1.2.0",
     "babel-plugin-transform-runtime": "6.23.0",
-    "babel-polyfill": "6.16.0",
     "babel-preset-env": "1.6.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-0": "6.16.0",

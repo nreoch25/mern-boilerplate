@@ -5,12 +5,16 @@ import { AppContainer } from "react-hot-loader";
 import { Provider } from "react-redux";
 import App from "./AppContainer";
 import { configureStore } from "./store";
+import sagas from "./sagas";
 
 // Base stylesheet
 require("./styles/main.css");
 
 // Initialize store
 const store = configureStore(window.__INITIAL_STATE__);
+// run redux sagas
+store.runSaga(sagas);
+
 const mountApp = document.getElementById("root");
 
 hydrate(

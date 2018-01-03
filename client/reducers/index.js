@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import app from "./AppReducer";
+import gists from "./GistsReducer";
 
 export default combineReducers({
-  app
+  gists
 });

@@ -112,7 +112,7 @@ app.get("*", async (req, res, next) => {
   }
   const finalState = store.getState();
   const loadableState = await getLoadableState(appWithRouter);
-  const initialView = renderToString(appWithRouter)
+  const initialView = renderToString(appWithRouter);
   res
     .set("Content-Type", "text/html")
     .status(200)
