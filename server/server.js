@@ -34,6 +34,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { getLoadableState } from "loadable-components/server";
+import sagas from "../client/sagas";
 import Context from "react-context-component";
 import AppContainer from "../client/AppContainer";
 
@@ -100,6 +101,7 @@ const renderFullPage = (html, initialState, loadableState) => {
 app.get("*", async (req, res, next) => {
   const store = configureStore();
   const context = {};
+  let loadableState = {};
   const appWithRouter = (
     <Provider store={store}>
       <StaticRouter context={{}} location={req.url}>
@@ -110,13 +112,21 @@ app.get("*", async (req, res, next) => {
   if (context.url) {
     return res.redirect(context.url);
   }
-  const finalState = store.getState();
-  const loadableState = await getLoadableState(appWithRouter);
-  const initialView = renderToString(appWithRouter);
-  res
-    .set("Content-Type", "text/html")
-    .status(200)
-    .end(renderFullPage(initialView, finalState, loadableState));
+
+  store.runSaga(sagas).done.then(() => {
+    const initialView = renderToString(appWithRouter);
+    const finalState = store.getState();
+    res
+      .set("Content-Type", "text/html")
+      .status(200)
+      .end(renderFullPage(initialView, finalState, loadableState));
+  });
+
+  loadableState = await getLoadableState(appWithRouter);
+
+  store.close();
+
+
 });
 
 app.listen(serverConfig.port, error => {
