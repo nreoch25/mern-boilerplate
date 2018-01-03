@@ -1,7 +1,7 @@
 # mern-boilerplate
 Mern Boilerplate - React 16, React-Router 4, Webpack3, Redux, Redux-saga, code Splitting with Loadable-components, HMR, and SSR
 
-**Note : Please make sure your MongoDB is running.** For MongoDB installation guide see [this](https://docs.mongodb.org/v3.0/installation/). Also `npm3` is required to install dependencies properly.
+**Note : Please make sure your MongoDB is running.**
 
 ## Quickstart
 
