@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 // import Index from "./components/Index";
 // import Home from "./components/Home";
@@ -9,6 +10,10 @@ import * as Routes from "./Routes";
 
 const App = () => (
   <div>
+    <Helmet>
+      <title>MERN Boilerplate</title>
+      <meta property="og:title" content="MERN Boilerplate" />
+    </Helmet>
     <Header />
     <Route
       path="/"

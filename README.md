@@ -1,5 +1,5 @@
 # mern-boilerplate
-Mern Boilerplate - React 16, React-Router 4, Webpack3, Redux, Redux-saga, code Splitting with Loadable-components, HMR, and SSR
+Mern Boilerplate - React 16, React-Router 4, Webpack3, Redux, Redux-saga, React-helmet, code Splitting with Loadable-components, HMR, and SSR
 
 **Note : Please make sure your MongoDB is running.**
 

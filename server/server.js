@@ -34,6 +34,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { getLoadableState } from "loadable-components/server";
+import { Helmet } from "react-helmet";
 import sagas from "../client/sagas";
 import Context from "react-context-component";
 import AppContainer from "../client/AppContainer";
@@ -65,11 +66,13 @@ const renderFullPage = (html, initialState, loadableState) => {
   const chunkManifest =
     process.env.webpackChunkAssets &&
     JSON.parse(process.env.webpackChunkAssets);
-
+  const helmet = Helmet.renderStatic();
   return `
     <!DOCTYPE HTML>
     <html>
       <head>
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
         ${process.env.NODE_ENV === "production"
           ? `<link rel="stylesheet" href="${assetsManifest["/app.css"]}" />`
           : ""}
