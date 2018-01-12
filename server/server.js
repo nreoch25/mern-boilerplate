@@ -128,8 +128,6 @@ app.get("*", async (req, res, next) => {
   loadableState = await getLoadableState(appWithRouter);
 
   store.close();
-
-
 });
 
 app.listen(serverConfig.port, error => {

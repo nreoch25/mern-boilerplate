@@ -1,6 +1,7 @@
 import React from "react";
 import { hydrate } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { loadComponents } from "loadable-components";
 import { AppContainer } from "react-hot-loader";
 import { Provider } from "react-redux";
 import App from "./AppContainer";
@@ -17,16 +18,18 @@ store.runSaga(sagas);
 
 const mountApp = document.getElementById("root");
 
-hydrate(
-  <AppContainer>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </AppContainer>,
-  mountApp
-);
+loadComponents().then(() => {
+  hydrate(
+    <AppContainer>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </AppContainer>,
+    mountApp
+  );
+});
 
 // For hot reloading of react components
 if (module.hot) {
