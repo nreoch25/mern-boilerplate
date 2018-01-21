@@ -88,13 +88,13 @@ const renderFullPage = (html, initialState, loadableState) => {
           //]]>`
             : ""}
         </script>
+        ${loadableState.getScriptTag()}
         <script src='${process.env.NODE_ENV === "production"
           ? assetsManifest["/vendor.js"]
           : "/vendor.js"}'></script>
         <script src='${process.env.NODE_ENV === "production"
           ? assetsManifest["/app.js"]
           : "/app.js"}'></script>
-        ${loadableState.getScriptTag()}
       </body>
     </html>
   `;
