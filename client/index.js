@@ -18,18 +18,20 @@ store.runSaga(sagas);
 
 const mountApp = document.getElementById("root");
 
-loadComponents().then(() => {
-  hydrate(
-    <AppContainer>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </AppContainer>,
-    mountApp
-  );
-});
+setTimeout(() => {
+  loadComponents().then(() => {
+    hydrate(
+      <AppContainer>
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </AppContainer>,
+      mountApp
+    );
+  });
+}, 0);
 
 // For hot reloading of react components
 if (module.hot) {
